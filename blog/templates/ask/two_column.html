@@ -1,0 +1,12 @@
+{% extends "ask/base.html" %}
+{% block container %}
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-8">
+        	{% block first_column %}{% endblock %}
+	    </div>
+	    <div class="col-md-4">
+	    	{% block second_column %} {% include "ask/right_bar.html" %} {% endblock %}
+	    </div>
+      </div>
+{% endblock %}

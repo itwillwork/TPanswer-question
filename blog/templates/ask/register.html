@@ -1,0 +1,54 @@
+{% extends "ask/two_column.html" %}
+{% block user_area %}
+                  <div class="TP-header-unlogin">
+                   <a href="{% url 'login' %}"> Войти </a><a href="{% url 'signup' %}"> Зарегистрироваться </a> 
+                  </div>
+{% endblock %}
+{% block first_column %}
+          <div class="TP-page-header"><h3> Регистрация </h3></div>
+          <form role="form" class="TP-registration">
+            <label class="control-label">Что-то введено не так проверьте правильность заполнения полей!</label>
+          <div class="form-group has-success has-feedback">
+            <div class="left"> Логин </div>
+            <div class="rigth">
+              <input type="text" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> Email </div>
+            <div class="rigth">
+              <input type="text" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> Ник </div>
+            <div class="rigth">
+              <input type="text" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> Пароль </div>
+            <div class="rigth">
+              <input type="password" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> Повторите пароль </div>
+            <div class="rigth">
+              <input type="password" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left">Загрузка аватара </div>
+            <div class="rigth">
+              <input type="file" id="exampleInputFile">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-default">Зарегистрироваться</button>
+        </form>
+{% endblock %} 

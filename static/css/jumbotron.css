@@ -1,0 +1,344 @@
+/* ******************************************* Общие ******************************************* */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+/* ******************************************* Шапка сайта ******************************************* */
+.TP-brand
+{
+	color: white;
+	font-size: 24px;
+}
+.TP-header
+{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    clear: both;
+    height: 50px;
+    padding-top: 5px;
+}
+.TP-header .ask_button
+{
+	width: 30%;
+	float: left;
+	margin-top: 3px;
+	color: #FFF;
+    background-color: #5CB85C;
+    border-color: #4CAE4C;
+    display: inline-block;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857;
+    border-radius: 4px;
+    -moz-user-select: none;
+    text-decoration: none;
+}
+.TP-header input
+{
+	width: 60%;
+	float: left;
+	margin-top: 3px;
+	margin-right: 2%;
+}
+.TP-header img
+{
+	float: left;
+}
+.TP-header-unlogin
+{
+	line-height: 40px;
+}
+.TP-header-unlogin a
+{
+	padding: 0 20px 0 20px;
+}
+.TP-header-user
+{
+	float:left;
+	padding-left: 20px;
+}
+.TP-header-user span
+{
+	font-weight: bold;
+	color: white;
+	font-size: 18px;
+	display: block;
+	clear: both;
+	width: 100%;
+	text-align: left;
+}
+.TP-header-user a 
+{
+	display: block;
+	padding: 0 10px 0 0;
+	float: left;
+}
+.TP-logout
+{
+	margin: 0 auto;
+	display: inherit;
+	height: 50px;
+}
+
+.col-md-3
+{
+	padding-left: 0px;
+}
+.navbar-brand
+{
+	padding-left: 0px;
+	padding-top: 20px;
+}
+/* ******************************************* левый сайдбар ******************************************* */
+.TP-menu
+{
+	width: 100%;
+	height: 100px;
+	clear: both;
+	line-height: 100px;
+	margin-top: 15px;
+	clear: both;
+	position: relative;
+}
+.TP-menu a
+{
+	font-size: 18px;
+	display: inline-block;
+	padding-right: 10px;
+}
+.TP-menu .click
+{
+	color: #333;
+	font-size: 24px;
+}
+.TP-answer
+{
+	margin: 15px 10px 15px 0px; 
+	padding: 4%;
+	border: 1px solid #DDD;	
+	border-radius: 5px;
+}
+.TP-left-qestion 
+{
+	clear: both;
+	display: inherit;
+	height: 120px;
+	width: 90px;
+	margin: 0 auto;
+}
+.TP-left-qestion img
+{
+	margin: 0 auto;
+}
+.TP-left-qestion .TP-like
+{
+	width: 100%;
+	padding-top: 10px;
+	text-align: center;
+	height: 30px;
+}
+.TP-left-qestion .TP-likes
+{
+	display: inline;
+	float: left;
+	height: 20px;
+	width: 30px;
+	text-align: center;
+	padding: 0 5px 0 5px;
+}
+.TP-question a
+{
+	display: block;
+	font-size: 18px;
+	width: auto;
+}
+.TP-question p
+{
+	padding-top: 15px;
+}
+.TP-under
+{
+	width: 100%;
+	font-size: 12px;
+}
+.TP-under a
+{
+	display: inline;
+	font-size: 12px;
+}
+.TP-under .TP-tags
+{
+	display: inline;
+	padding-left: 3%;
+}
+.TP-navigation
+{
+	width: 100%;
+	padding: 20px 0;
+}
+.TP-navigation .page
+{
+	width: 30px;
+	height: 30px;
+	background: #428BCA;
+	margin: 5px;
+	padding: 5px;
+	line-height: 30px;
+	text-align: center;
+	color: white;
+	border-radius: 5px;
+
+}
+/* ******************************************* правый сайдбар ******************************************* */
+.TP-right-block
+{
+	width: 100%;
+	clear: both;
+	margin-top: 20px;	
+	padding: 10px;
+}
+.TP-right-block .tags
+{
+	display: inherit;
+	margin: 5px;
+	float: left;
+}
+.tags .h4 {font-size: 18px;}
+.tags .h5 {font-size: 16px;}
+.tags .h6 {font-size: 14px;}
+.TP-right-block span
+{
+	display: block;
+	width: 100%;
+	font-size: 24px;
+	height: 50px;
+	line-height: 50px;
+}
+.TP-right-block a
+{
+	display: block;
+}
+.TP-right-block a:hover
+{
+	color: #333;
+}
+/* ******************************************* страница с заданием вопроса ******************************************* */
+.TP-first
+{
+	margin-top: 30px;
+}
+.TP-page-header
+{
+	padding-top: 30px;
+	font-size: 24px;
+	margin-bottom: 30px;
+}
+.TP-new-qestion .left
+{
+	width:15%;
+	float:left;
+	line-height: 34px;
+}
+.TP-new-qestion .right
+{
+	width:85%;
+	float:left;
+}
+.TP-new-qestion input
+{
+	width: 85%;	
+}
+.TP-new-qestion textarea
+{
+	width: 85%;	
+}
+.TP-new-qestion button
+{
+	margin-left: 15%;
+}
+/* ******************************************* страница с ответами ******************************************* */
+.TP-ans
+{
+	margin-top: 40px;
+}
+.TP-qestion
+{
+	margin: 15px 10px 15px 0px; 
+	padding: 4%;
+}
+.TP-answer-page
+{
+	background: rgba(66, 139, 202, 0.08) none repeat scroll 0% 0%;
+}
+.TP-answer-block p
+{
+	padding-top: 0;
+}
+.TP-answer-block .TP-tags
+{
+	padding-left: 0;
+}
+.TP-answer-block label
+{
+	line-height: 20px;
+}
+.TP-write-answer button
+{
+	margin-top: 10px;
+}
+/* ******************************************* Регистрация ******************************************* */
+
+{
+
+}
+.TP-registration .left
+{
+	width:25%;
+	float:left;
+	line-height: 34px;
+}
+.TP-registration .right
+{
+	width:75%;
+	float:left;
+}
+.TP-registration input
+{
+	width: 75%;	
+}
+.TP-registration  textarea
+{
+	width: 75%;	
+}
+.TP-registration button
+{
+	margin-left: 25%;
+}
+.TP-registration .control-label
+{
+	color: #A94442;
+	display: block;
+	padding-bottom: 30px;
+}
+
+/* ******************************************* Страница входа ******************************************* */
+.TP-ancor-reg
+{
+	display: block;
+	padding-left: 25%;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+/* ******************************************* Пагинатор ******************************************* */
+.current
+{
+	font-weight: bold;
+}

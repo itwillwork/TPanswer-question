@@ -1,0 +1,41 @@
+{% extends "ask/two_column.html" %}
+{% block first_column %}
+          <div class="TP-page-header"><h3> Настройки аккаунта: Bender </h3></div>
+          <form role="form" class="TP-registration">
+          <div class="form-group has-success has-feedback">
+            <div class="left"> Логин </div>
+            <div class="rigth">
+              <input type="text" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> Email </div>
+            <div class="rigth">
+              <input type="text" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> Ник </div>
+            <div class="rigth">
+              <input type="text" class="form-control" id="inputSuccess2">
+              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left">Загрузка аватара </div>
+            <div class="rigth">
+              <img src="http://placekitten.com/g/90/90/" class="img-rounded">
+              
+            </div>
+          </div>
+          <div class="form-group has-error has-feedback">
+            <div class="left"> <br></div>
+            <div class="rigth">
+              <input type="file" id="exampleInputFile">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-default">Изменить настройки</button>
+        </form>
+{% endblock %} 

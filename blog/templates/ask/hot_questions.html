@@ -1,0 +1,10 @@
+{% extends "ask/two_column.html" %}
+{% block first_column %}
+          <div class="TP-menu">
+            <a href="{% url 'index' %}" >Новые вопросы</a> <a href="{% url 'hot_questions' %}" class="click"> Самые обсуждаемые</a>
+          </div>
+          {% for item in questions%}
+            {% include "ask/question.html" %} 
+          {% endfor %}
+            {% include "ask/paginator.html" %} 
+{% endblock %} 
