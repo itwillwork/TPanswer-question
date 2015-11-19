@@ -8,9 +8,13 @@
           <div class="TP-ans">
             {% include "ask/question.html" %}
           </div>
-          {% for item in answers%}
-              {% include "ask/one_answer.html" %} 
-          {% endfor %}
+          {% if answers %}
+            {% for item in answers%}
+                {% include "ask/one_answer.html" %} 
+            {% endfor %}
+          {% else %}
+            По данному вопросу пока нет ответов
+          {% endif %}
           <div class="TP-write-answer">
             <form role="form">
               <textarea class="form-control" rows="3">Оставьте свой ответ на вопрос</textarea>
