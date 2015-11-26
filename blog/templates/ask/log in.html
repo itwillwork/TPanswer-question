@@ -1,28 +1,24 @@
 {% extends "ask/two_column.html" %}
-{% block user_area %}
-                  <div class="TP-header-unlogin">
-                   <a href="{% url 'login' %}"> Войти </a><a href="{% url 'signup' %}"> Зарегистрироваться </a> 
-                  </div>
-{% endblock %}
 {% block first_column %}
-          <div class="TP-page-header"><h3> Вход </h3></div>
-          <form role="form" class="TP-registration">
-            <label class="control-label">Данной связки логина и пароля не существует! </label>
-          <div class="form-group has-success has-feedback">
-            <div class="left"> Логин </div>
-            <div class="rigth">
-              <input type="text" class="form-control" id="inputSuccess2">
-              <span class="glyphicon glyphicon-ok form-control-feedback"></span>
+          {% if description %}
+            <div class="TP-page-header"><h3> Вход </h3></div>
+            <div class="log_in_form">
+              {{description}}
+              <br>
+              <a href="{% url 'log_out' %}">Выйти</a>
             </div>
-          </div>
-          <div class="form-group has-error has-feedback">
-            <div class="left"> Пароль </div>
-            <div class="rigth">
-              <input type="password" class="form-control" id="inputSuccess2">
-              <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+          {% else %}
+            <div class="TP-page-header"><h3> Вход </h3></div>
+            <div class="log_in_form">
+            {% if error %}
+              <label class="control-label"> {{ error }} </label>
+            {% endif %}
+              <form role="form"  method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" class="btn btn-default sub" value="Вход" />
+              </form>
+              <a class=" reg" href="{% url 'signup' %}"> Зарегистрироваться </a>
             </div>
-          </div>
-          <button type="submit" class="btn btn-default">Вход</button>
-          <a class="TP-ancor-reg" href="{% url 'signup' %}"> Зарегистрироваться </a>
-        </form>
+          {% endif %}
 {% endblock %} 

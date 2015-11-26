@@ -1,9 +1,4 @@
 {% extends "ask/two_column.html" %}
-{% block user_area %}
-                  <div class="TP-header-unlogin">
-                   <a href="{% url 'login' %}"> Войти </a><a href="{% url 'signup' %}"> Зарегистрироваться </a> 
-                  </div>
-{% endblock %}
 {% block first_column %}
           <div class="TP-ans">
             {% include "ask/question.html" %}

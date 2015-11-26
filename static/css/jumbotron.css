@@ -296,23 +296,59 @@ body {
 }
 /* ******************************************* Регистрация ******************************************* */
 
-{
-
-}
 .TP-registration .left
 {
-	width:25%;
+	width:20%;
 	float:left;
 	line-height: 34px;
+	font-weight: bold;
+	height: 45px;
 }
 .TP-registration .right
 {
-	width:75%;
+	width:80%;
 	float:left;
+	height: 45px;
 }
 .TP-registration input
 {
-	width: 75%;	
+	width: 75%;
+	height: 34px;	
+	display: block;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.TP-registration textarea
+{
+	display: block;
+	width: 100%;
+	height: 120px;
+	margin-bottom: 15px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857;
+	color: #555;
+	background-color: #FFF;
+	background-image: none;
+	border: 1px solid #CCC;
+	border-radius: 4px;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+}
+.TP-registration input .has-error {
+    border-color: #A94442;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
 .TP-registration  textarea
 {
@@ -320,15 +356,31 @@ body {
 }
 .TP-registration button
 {
-	margin-left: 25%;
+	margin-top: 30px;
+	/*margin-left: 25%;*/
 }
 .TP-registration .control-label
 {
 	color: #A94442;
 	display: block;
-	padding-bottom: 30px;
+	text-align: left;
+	font-weight: normal;
 }
-
+.control-label ul
+{
+	padding-left: 20%;
+	list-style: none;
+}
+.TP-registration .sub
+{
+	margin-left: 0px;
+}
+.TP-registration .form-group
+{
+	height: 35px;
+	width: 100%;
+	clear: both;
+}
 /* ******************************************* Страница входа ******************************************* */
 .TP-ancor-reg
 {
@@ -337,6 +389,42 @@ body {
 	padding-top: 30px;
 	padding-bottom: 30px;
 }
+.log_in_form .control-label
+{
+	color: red;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	clear: both;
+	width: 100%;
+}
+.log_in_form label
+{
+	float: left;
+	width: 20%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.log_in_form input
+{
+	float: left;
+	width: 80%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.log_in_form .sub
+{
+	width: 200px;
+	float: left;
+	clear: both;
+	margin-top: 20px;
+}
+.log_in_form .reg
+{
+	float: left;
+	clear: both;
+	margin-top: 20px;
+}
+
 /* ******************************************* Пагинатор ******************************************* */
 .current
 {

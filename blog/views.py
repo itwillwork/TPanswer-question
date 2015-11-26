@@ -1,9 +1,15 @@
-﻿from django.http import HttpResponse
+﻿from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+#from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from blog.models import Question, Profile, Answer
-from django.http import Http404
+from django.core.urlresolvers import reverse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from blog.models import Question, Profile, Answer, Tags
+from django import forms
+from blog.forms import login_form, signup_form, settings_form, create_ask_form
 
 def index(request):
     questions = Question.objects.last_posts()
@@ -54,6 +60,7 @@ def tag(request, tag_name):
         "tag_name": tag_name
         })
 
+@login_required
 def question(request, question_id):
     try:
         #вопрос
@@ -81,20 +88,122 @@ def question(request, question_id):
             "answers": answers
             })
     except Question.DoesNotExist:
-        raise Http404("Question does not exist")
+        raise Http404(u"Такого вопроса нет((")
 
-def login(request):
-    return render(request, 'ask/log in.html')
+def log_in(request):
+    error = '' 
+    if request.user.is_authenticated():
+        description = u'Вы уже авторизовались на нашем сайте как, ' + request.user.username
+        return render(request, 'ask/log in.html', {'description': description})
+    else:
+        if request.method == 'POST':
+            injected_login = request.POST.get('login')
+            injected_password = request.POST.get('password')
+            user = authenticate(username=injected_login, password=injected_password)
+            if user is not None:
+                if user.is_active:
+                    df = login(request, user)
+                    url = request.GET.get('next')
+                    if url:
+                        return HttpResponseRedirect(url)
+                    else:
+                        return HttpResponseRedirect(reverse('index'))
+                else:
+                    error = u'Пароль верен, но аккаунт заблокирован'
+            else:
+                error = u'Неверный логин / пароль'
+        form = login_form(initial={
+            'login' : request.POST.get('login')
+            })
+        return render(request, 'ask/log in.html', {'form': form , 'error': error})
+
+@login_required
+def log_out(request):
+    logout(request)
+    url = request.META['HTTP_REFERER']
+    return HttpResponseRedirect(url)
 
 def signup(request):
-    return render(request, 'ask/register.html')
+    error = {}
+    if request.method == 'POST':
+        form = signup_form(request.POST)
+        if form.is_valid():
+            injected_login = request.POST.get('login_user')
+            injected_password = request.POST.get('password')
+            injected_email = request.POST.get('email')
+            u = User.objects.create_user(injected_login, injected_email, injected_password)
+            userdf = Profile.objects.create( user = u , avatar = "http://placekitten.com/g/90/90/")
+            created_user = authenticate(username=injected_login, password=injected_password)
+            df = login(request, created_user)
+            return HttpResponseRedirect(reverse('index'))
+    else:
+        form = signup_form()
+    return render(request, 'ask/register.html', {'form': form , 'error': error})
 
+@login_required
 def ask(request):
-    return render(request, 'ask/ask.html')
-
+    if request.method == 'POST':
+        form = create_ask_form(request.POST)
+        if form.is_valid():
+            print(request.user.id)
+            data = form.cleaned_data
+            tags = data['tags'].replace(" ","").split(",")
+            q = Question.objects.create( 
+                title = data['title'], 
+                text_qest = data['text'], 
+                count_ans = 0, 
+                rating = 0, 
+                author_id = request.user.id
+                )
+            for tag in tags:
+                if len(tag) > 0:
+                    try:
+                        currentTag = Tags.objects.get(name = tag.lower())
+                    except:
+                        currentTag = Tags(name = tag.lower())
+                        currentTag.save()
+                    q.tags.add(currentTag)
+            return HttpResponseRedirect(reverse('question', kwargs={'question_id': q.id}))
+    else:
+        form = create_ask_form()
+    return render(request, 'ask/ask.html', {'form': form})
+    
+@login_required
 def settings(request):
-    return render(request, 'ask/settings.html')
+    if request.method == 'POST':
+        form = settings_form(request.POST, request.FILES)
+        if form.is_valid():
+            if request.POST.get('login_user') != request.user.username:
+                if User.objects.filter(username=request.POST.get('login_user')):
+                    duplicate = u"Такое имя уже есть в базе!"
+                    return render(request, 'ask/settings.html', {'form': form, 'duplicate': duplicate})
+                else:
+                    u = User.objects.get(username=request.user.username)
+                    u.username = request.POST.get('login_user')
+                    u.save()
+            if request.POST.get('password'):
+                u = User.objects.get(username=request.user.username)
+                u.set_password(request.POST.get('password'))
+                u.save()
+                #заново логинимся
+                userdf = authenticate(username= request.POST.get('login_user'), password= request.POST.get('password'))
+                df = login(request, userdf)
+            if request.POST.get('avatar'):
+                print('izm avatar')
+            if request.POST.get('email') != request.user.email:
+                u = User.objects.get(username=request.user.username)
+                u.email = request.POST.get('email')
+                u.save()
+    else:
+        form = settings_form(initial = {
+            'login_user': request.user.username,
+            'email': request.user.email
+        })
+    return render(request, 'ask/settings.html', {'form': form})
+
+##################################################################################
 # быдло код для 1 ДЗ
+##################################################################################
 
 html = """
 <html>

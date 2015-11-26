@@ -24,13 +24,17 @@
             <div class="col-md-3">
               <div class="TP-header">
                 <div class="TP-logout">
-                  {% block user_area %}
-                  <img src="http://placekitten.com/g/40/40/" class="img-rounded">
-                  <div class="TP-header-user">
-                   <span> User Name </span>
-                   <a href="{% url 'settings' %}"> settings </a><a href="#"> log out </a> 
-                  </div>
-                  {% endblock %}
+                    {% if user.is_authenticated %}
+                      <img src='{{request.user.avatar}}'  class="img-rounded">
+                      <div class="TP-header-user">
+                       <span> {{user.username}} </span>
+                       <a href="{% url 'settings' %}"> Настройки </a><a href="{% url 'log_out' %}"> Выход </a> 
+                      </div>
+                    {% else %}
+                      <div class="TP-header-unlogin">
+                        <a href="{% url 'log_in' %}"> Войти </a><a href="{% url 'signup' %}"> Зарегистрироваться </a> 
+                      </div>
+                    {% endif %}
                 </div>
               </div>
             </div>

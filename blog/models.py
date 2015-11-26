@@ -6,9 +6,16 @@ from  django.contrib.auth.models import User
 class Tags(models.Model):
     name = models.CharField(max_length=30)
 
+class treatment_profile(models.Manager):
+    def create_profile(self, login, email, password):
+        u = User.objects.create_user(login, email, password)
+        userdf = Profile.objects.create( user = u , avatar = "http://placekitten.com/g/90/90/")
+        return userdf
+
 class Profile(models.Model):
-	avatar = models.ImageField(max_length=200)
-	user = models.OneToOneField(User)
+    avatar = models.ImageField(max_length=200)
+    user = models.OneToOneField(User, unique=True, parent_link=True)
+    objects = treatment_profile()
 
 class treatment_questions(models.Manager):
     def last_posts(self):
@@ -30,6 +37,10 @@ class Question(models.Model):
     author = models.ForeignKey(Profile)
     objects = treatment_questions()
 
+class treatment_answers(models.Manager):
+    def get_answer(self, question_id):
+        return self.filter(question__id = question_id).order_by('-date').order_by('-rating')
+
 class Answer(models.Model):
 	question = models.ForeignKey(Question)
 	text_ans = models.TextField()
@@ -37,8 +48,7 @@ class Answer(models.Model):
 	author = models.ForeignKey(Profile)
 	rating = models.IntegerField()
 	correct = models.BooleanField()
-	def get_answer(question_id):
-		return self.filter(question__id= question_id).order_by('-date').order_by('-rating')
+	objects = treatment_answers()
 
 class Like(models.Model):
 	entity = models.BooleanField()
