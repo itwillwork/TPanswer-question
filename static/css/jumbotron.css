@@ -294,6 +294,15 @@ body {
 {
 	margin-top: 10px;
 }
+.refresh_link
+{
+	display: inline;
+}
+.TP-left-qestion img 
+{
+	width: 90px;
+	margin: 0 auto;
+}
 /* ******************************************* Регистрация ******************************************* */
 
 .TP-registration .left
@@ -429,4 +438,19 @@ body {
 .current
 {
 	font-weight: bold;
+}
+
+/* ******************************************** лайки *********************** */
+.like__button
+{
+	cursor: pointer;
+}
+.response_for_answer
+{
+	color: green;
+	margin: 20px;
+}
+.error
+{
+	color:  red;
 }

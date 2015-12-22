@@ -2,31 +2,55 @@
             <div class="row">
               <div class="col-md-2">
                 <div class="TP-left-qestion">
-                  <img src="{{item.author.avatar}}" class="img-rounded">
+                  <img src="{{item.author.avatar.url}}" class="img-rounded">
+                  {% with likes_answers.pop as likes %}
                   <div class="TP-like">
                     <div class="TP-likes">
-                      <a href="#"> + </a>
+                      {% if likes %}  
+                        <span id="{{ item.id }}" class="like__button answer_like {{ item.id }}">+</span>
+                      {% endif %}
                     </div>
-                    <div class="TP-likes">
-                      <b> {{ item.rating }} </b>
+                    <b>
+                    <div class="TP-likes {{ item.id }}">
+                       {{ item.rating }} 
                     </div>
+                    </b>
                     <div class="TP-likes">
-                      <a href="#"> - </a>
+                      {% if likes %} 
+                        <span id="{{ item.id }}" class="like__button answer_dislike {{ item.id }}">-</span>
+                      {% endif %}
                     </div>
                   </div>
+                  {% endwith %}
                 </div>
               </div>
               <div class="col-md-10">
                 <div class="TP-question TP-answer-block">
-                  <p> {{ item.text_ans }} </p> 
+                  <p>  {{ item.text_ans }} </p> 
+                  {% if it_is_author %}
                   <div class="TP-under">
                     <div class="checkbox">
                       <label>
-                        <input type="checkbox" value="">
+                        <input id="{{ item.id }}" type="checkbox" class="ckeck_ans" 
+                        {% if item.correct %}
+                        checked="checked"
+                        {% endif %}
+                        >
                         Чекните, если ответ понравился
                       </label>
                     </div>
                   </div>
+                  {% else %}
+                  <div class="TP-under">
+                    <div class="checkbox">
+                      <label>
+                        {% if item.correct %}
+                          <span class="glyphicon glyphicon-thumbs-up"> </span> Ответ понравился автору
+                        {% endif %}
+                      </label>
+                    </div>
+                  </div>
+                  {% endif %}
                 </div>
               </div>
             </div>

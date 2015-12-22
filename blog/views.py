@@ -1,4 +1,6 @@
-﻿from django.http import HttpResponse, Http404, HttpResponseRedirect
+﻿from django.http import HttpResponse
+from django.http import JsonResponse
+from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 #from django.views.decorators.csrf import requires_csrf_token
 from django.shortcuts import render
@@ -7,9 +9,10 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from blog.models import Question, Profile, Answer, Tags
+from blog.models import Question, Profile, Answer, Tags, LikeForAnswer, LikeForQuestion
 from django import forms
 from blog.forms import login_form, signup_form, settings_form, create_ask_form
+
 
 def index(request):
     questions = Question.objects.last_posts()
@@ -24,7 +27,55 @@ def index(request):
     #    'text': str(i) + ' ' + text1,
     #    })
     questions = paginate(questions, request, 10)
-    return render(request, 'ask/index.html', {"questions": questions})
+    likes = your_likes_questions(request.user, questions)
+    return render(request, 'ask/index.html', {"questions": questions, "likes_question" : likes})
+
+def your_likes_questions(user, questions):
+    likes = []
+    if user.is_authenticated():
+        try:
+            for node in reversed(questions):
+                prof = Profile.objects.filter(user = user)
+                l = LikeForQuestion.objects.filter(question = node, author = prof)
+                if (l):
+                    likes.append(0)
+                else:
+                    likes.append(1)
+        except:
+            prof = Profile.objects.filter(user = user)
+            l = LikeForQuestion.objects.filter(question = questions, author = prof)
+            if (l):
+                likes.append(0)
+            else:
+                likes.append(1)
+            
+    else:
+        for i in questions:
+            likes.append(0)
+    return likes
+
+def your_likes_answers(user, answers):
+    likes = []
+    if user.is_authenticated():
+        try:
+            for node in reversed(answers):
+                prof = Profile.objects.filter(user = user)
+                l = LikeForAnswer.objects.filter(answer = node, author = prof)
+                if (l):
+                    likes.append(0)
+                else:
+                    likes.append(1)
+        except:
+            prof = Profile.objects.filter(user = user)
+            l = LikeForAnswer.objects.filter(answer = answers, author = prof)
+            if (l):
+                likes.append(0)
+            else:
+                likes.append(1)         
+    else:
+        for i in answers:
+            likes.append(0)
+    return likes
 
 def paginate(objects_list, request, quantity_per_page):
     paginator = Paginator(objects_list, quantity_per_page) # Show 10 objects per page
@@ -50,13 +101,16 @@ def hot_questions(request):
     #    })
     questions = Question.objects.best_post()
     questions = paginate(questions, request, 10)
-    return render(request, 'ask/hot_questions.html', {"questions": questions})
+    likes_question = your_likes_questions(request.user, questions)
+    return render(request, 'ask/hot_questions.html', {"questions": questions, "likes_question" : likes_question})
 
 def tag(request, tag_name):
     questions = Question.objects.tag(tag_name)
     questions = paginate(questions, request, 10)
+    likes_question = your_likes_questions(request.user, questions)
     return render(request, 'ask/tags.html', {
         "questions": questions,
+        "likes_question" : likes_question,
         "tag_name": tag_name
         })
 
@@ -73,6 +127,8 @@ def question(request, question_id):
         #'text': str(question_id) + ' ' + text1,
         #}
         question = Question.objects.post(int(question_id))
+        likes_question = your_likes_questions(request.user, question)
+        it_is_author  = Question.objects.it_is_author(question, request.user)
         #ответы
         #TEST DATA
         #answers = []
@@ -83,9 +139,13 @@ def question(request, question_id):
         #    'text': str(i) + ' ' + text1,
         #    })
         answers = Answer.objects.get_answer(int(question_id))
+        likes_answers = your_likes_answers(request.user, answers)
         return render(request,  'ask/answer.html', {
             "item": question,
-            "answers": answers
+            "answers": answers,
+            "likes_question" : likes_question,
+            "likes_answers" : likes_answers,
+            "it_is_author" : it_is_author
             })
     except Question.DoesNotExist:
         raise Http404(u"Такого вопроса нет((")
@@ -132,7 +192,7 @@ def signup(request):
             injected_password = request.POST.get('password')
             injected_email = request.POST.get('email')
             u = User.objects.create_user(injected_login, injected_email, injected_password)
-            userdf = Profile.objects.create( user = u , avatar = "http://placekitten.com/g/90/90/")
+            userdf = Profile.objects.create( user = u )
             created_user = authenticate(username=injected_login, password=injected_password)
             df = login(request, created_user)
             return HttpResponseRedirect(reverse('index'))
@@ -188,18 +248,117 @@ def settings(request):
                 #заново логинимся
                 userdf = authenticate(username= request.POST.get('login_user'), password= request.POST.get('password'))
                 df = login(request, userdf)
-            if request.POST.get('avatar'):
-                print('izm avatar')
+            if form.cleaned_data['avatar']:
+                m = Profile.objects.get(user = request.user)
+                m.avatar = form.cleaned_data['avatar']
+                m.save()
             if request.POST.get('email') != request.user.email:
                 u = User.objects.get(username=request.user.username)
                 u.email = request.POST.get('email')
                 u.save()
+
+            
     else:
         form = settings_form(initial = {
             'login_user': request.user.username,
             'email': request.user.email
         })
     return render(request, 'ask/settings.html', {'form': form})
+
+#AJAX добавление ответа на вопрос
+def create_answer(request):
+    if request.method == 'POST':
+        post_text = request.POST.get('text')
+        post_id = request.POST.get('question_id')
+        q = Question.objects.otvet(int(post_id))
+        prof = Profile.objects.get(user = request.user)
+        ans = Answer.objects.create(
+                    question = q,
+                    text_ans = post_text,
+                    author = prof,
+                    rating = 0,
+                    correct = False,
+                    );
+        response_data = {}
+        response_data['result'] = 'Create answer successful!'
+        return HttpResponse(
+            JsonResponse(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            JsonResponse({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+#AJAX лайк или дизлайк ответу
+def change_rating_answer(request):
+    if request.method == 'POST':
+        inject_answer_id = request.POST.get('answer_id')
+        inject_mark = request.POST.get('mark')
+        inject_answer = Answer.objects.get_ans(int(inject_answer_id), int(inject_mark))
+        inject_profile = Profile.objects.get(user = request.user)
+        ans = LikeForAnswer.objects.create(
+                    answer = inject_answer,
+                    mark = inject_mark,
+                    author = inject_profile,
+                    );
+        response_data = {}
+        response_data['rating'] = inject_answer.rating
+        response_data['result'] = 'Create like or dislike successful!'
+        return HttpResponse(
+            JsonResponse(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            JsonResponse({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+#AJAX лайк или дизлайк вопросу
+def change_rating_question(request):
+    if request.method == 'POST':
+        inject_question_id = request.POST.get('question_id')
+        inject_mark = request.POST.get('mark')
+        inject_quest = Question.objects.get_quest(int(inject_question_id), int(inject_mark))
+        inject_profile = Profile.objects.get(user = request.user)
+        quest = LikeForQuestion.objects.create(
+                    question = inject_quest,
+                    mark = inject_mark,
+                    author = inject_profile,
+                    );
+        response_data = {}
+        response_data['rating'] = inject_quest.rating
+        response_data['result'] = 'Create like or dislike successful!'
+        return HttpResponse(
+            JsonResponse(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            JsonResponse({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+#AJAX выбор правильного ответа
+def check_answer(request):
+    if request.method == 'POST':
+        inject_answer_id = request.POST.get('answer_id')
+        inject_mark = request.POST.get('mark')
+        ans = Answer.objects.mark_ans(inject_answer_id, inject_mark)
+        response_data = {}
+        response_data['res'] = ans.correct
+        response_data['result'] = 'Mark answer is successful!'
+        return HttpResponse(
+            JsonResponse(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            JsonResponse({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
 
 ##################################################################################
 # быдло код для 1 ДЗ

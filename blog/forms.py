@@ -56,7 +56,7 @@ class settings_form(forms.Form):
         required = False
         )
     
-    avatar = forms.FileField(
+    avatar = forms.ImageField(
         label='Аватар',
         required = False
         )

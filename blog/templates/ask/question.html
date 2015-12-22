@@ -3,24 +3,33 @@
             <div class="row">
               <div class="col-md-2">
                 <div class="TP-left-qestion">
-                  <img src="{{item.author.avatar}}" class="img-rounded">
+                  <img src="{{item.author.avatar.url}}" class="img-rounded">
                   <div class="TP-like">
+                  {% with likes_question.pop as likes %}
                     <div class="TP-likes">
-                      <a href="#"> + </a>
+                      {% if likes %}                  
+                        <span id="{{ item.id }}" class="like__button question_like {{ item.id }}">+</span>
+                      {% endif %}
                     </div>
+                      <b>
+                        <div class="TP-likes {{ item.id }}">
+                           {{ item.rating }} 
+                        </div>
+                      </b>
                     <div class="TP-likes">
-                      <b> {{item.rating}} </b>
+                      {% if likes %} 
+                        <span id="{{ item.id }}" class="like__button question_dislike {{ item.id }}">-</span>
+                      {% endif %}
                     </div>
-                    <div class="TP-likes">
-                      <a href="#"> - </a>
-                    </div>
+                    {% endwith %}
                   </div>
                 </div>
               </div>
               <div class="col-md-10">
                 <div class="TP-question">
                   <a href="{% url 'question' item.id  %}">{{item.title}}</a>
-                  <p> {{item.text_qest}} </p> 
+                  <p> 
+                     {{item.text_qest}} </p> 
                   <div class="TP-under">
                     <a href="{% url 'question' item.id  %}"> Ответы ({{item.count_ans}}) </a>
                     <div class="TP-tags">

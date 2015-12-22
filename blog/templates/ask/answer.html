@@ -11,8 +11,10 @@
             По данному вопросу пока нет ответов
           {% endif %}
           <div class="TP-write-answer">
-            <form role="form">
-              <textarea class="form-control" rows="3">Оставьте свой ответ на вопрос</textarea>
+            <form role="form" action="{% url 'create_answer' %}" method="POST" id="post-form">
+              {% csrf_token %}
+              <input name="question_id" type="hidden" value="{{ item.id }}">
+              <textarea class="form-control" name="text" rows="3">Оставьте свой ответ на вопрос</textarea>
               <button type="submit" class="btn btn-default">Ответить</button>
             </form>
           </div>
